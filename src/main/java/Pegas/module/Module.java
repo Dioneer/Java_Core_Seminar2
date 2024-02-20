@@ -1,8 +1,10 @@
-package Pegas;
+package Pegas.module;
 
 import java.util.*;
 
-public class Program {
+public class Module implements Observer{
+    private final View view;
+    private final SimpleLogic simpleLogic;
     private static final char DOT_HUMAN = 'X';
     private static final char DOT_AI = 'O';
     private static final char DOT_EMPTY = '*';
@@ -12,12 +14,31 @@ public class Program {
     private static int fieldSizeX;
     private static int fieldSizeY;
 
+    public Module(View view, SimpleLogic simpleLogic) {
+        this.view = view;
+        this.simpleLogic = simpleLogic;
+        this.view.setObserver(this);
+    }
+    public void init(int x, int y) {
+        do {
+            initialize(x, y);
+            while (true) {
+                humanTurn();
+                if (checkState(DOT_HUMAN, "You win!"))
+                    break;
+                aiTurn();
+                if (checkState(DOT_AI, "You win!"))
+                    break;
+            }
+            System.out.println("Do you want to continue(Y/N)? ");
+        } while (!scanner.next().equalsIgnoreCase("N"));
+    }
     /**
      *
      * @param x горизонталь
      * @param y вертикаль
      */
-    static void initialize(int x, int y){
+    public void initialize(int x, int y){
         fieldSizeX = x>0?x:3;
         fieldSizeY = y>0?y:3;
         field = new char[fieldSizeX][fieldSizeY];
@@ -31,69 +52,44 @@ public class Program {
     /**
      * Print field
      */
-    static void printField(){
-        System.out.print("+");
-        for (int i = 0; i < fieldSizeX; i++) {
-            System.out.print("-"+(i+1));
-        }
-        System.out.println("-");
-        for (int k = 0; k < fieldSizeX; k++) {
-            System.out.print(k+1 +"|");
-            for (int j = 0; j < fieldSizeY; j++) {
-                System.out.print(field[k][j]+"|");
-            }
-            System.out.println();
-        }
+    public void drawField(){
+        simpleLogic.printField(fieldSizeX, fieldSizeY, field);
     }
-    static void humanTurn(){
+    public void humanTurn(){
         int x; int y;
         do{
             System.out.println("Enter X and Y step coordinates\n(from 1 to 3) with a space: ");
             x = scanner.nextInt() - 1;
             y = scanner.nextInt() - 1;
-        }while (!isCellValid(x,y) || !isCellEmpty(x,y));
+        }while (!checkCellValid(x,y) || !checkCellEmpty(x,y));
         field[x][y] = DOT_HUMAN;
-        printField();
+        drawField();
     }
-    static void aiTurn(){
+    public void aiTurn(){
         int x; int y;
         do{
             System.out.println("Now ai turn: ");
             x = random.nextInt(fieldSizeX);
             y = random.nextInt(fieldSizeY);
         }
-        while (!isCellEmpty(x,y));
+        while (!checkCellEmpty(x,y));
         field[x][y] = DOT_AI;
-        printField();
+        drawField();
     }
-    static boolean isCellEmpty(int x, int y){
-        boolean rez = field[x][y] == DOT_EMPTY;
-        if(!rez){
-            System.out.println("This cell is not empty");
-        }
-        return  rez;
+    public boolean checkCellEmpty(int x, int y){
+        return simpleLogic.isCellEmpty(x, y, field, DOT_EMPTY);
     }
 
-    /**
-     * check valid cell
-     * @param x horizontal
-     * @param y vertical
-     * @return true if valid
-     */
-    static boolean isCellValid(int x, int y){
-        boolean rez = x>=0&& x <fieldSizeX && y>=0 && y <fieldSizeY;
-        if(!rez){
-            System.out.println("Your coordinates are not valid");
-        }
-        return  rez;
+    public boolean checkCellValid(int x, int y){
+        return simpleLogic.isCellValid(x, y, fieldSizeX, fieldSizeY);
     }
 
     /**
      * function for check winner
-     * @param dot
-     * @return
+     * @param dot for check
+     * @return true if we have the winner or false if not
      */
-    static boolean checkWin(char dot){
+    public boolean checkWin(char dot){
         if(field[0][0] == dot &&field[0][1] == dot&&field[0][2] == dot) return true;
         if(field[1][0] == dot &&field[1][1] == dot&&field[1][2] == dot) return true;
         if(field[2][0] == dot &&field[2][1] == dot&&field[2][2] == dot) return true;
@@ -111,13 +107,8 @@ public class Program {
      * friendship is win!
      * @return true if all cells are fill
      */
-    static boolean checkDraw(){
-        for (int x = 0; x < fieldSizeX; x++) {
-            for (int y = 0; y < fieldSizeY; y++) {
-                if(isCellEmpty(x, y)) return false;
-            }
-        }
-        return true;
+    public boolean checkDraw(){
+        return simpleLogic.checkDraw(fieldSizeX, fieldSizeY, field, DOT_EMPTY);
     }
 
     /**
@@ -126,7 +117,7 @@ public class Program {
      * @param s
      * @return
      */
-    static boolean checkState(char dot, String s){
+    public boolean checkState(char dot, String s){
         if(checkWin(dot)){
             System.out.println(s);
             return true;
@@ -134,19 +125,5 @@ public class Program {
             System.out.println("friendship is win!");
         }
         return false;
-    }
-    public static void main(String[] args) {
-        do {
-            initialize(3, 3);
-            while (true) {
-                humanTurn();
-                if (checkState(DOT_HUMAN, "You win!"))
-                    break;
-                aiTurn();
-                if (checkState(DOT_AI, "You win!"))
-                    break;
-            }
-            System.out.println("Do you want to continue(Y/N)? ");
-        } while (!scanner.next().equalsIgnoreCase("N"));
     }
 }
