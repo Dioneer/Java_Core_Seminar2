@@ -55,6 +55,10 @@ public class Module implements Observer{
     public void drawField(){
         simpleLogic.printField(fieldSizeX, fieldSizeY, field);
     }
+
+    /**
+     * human step
+     */
     public void humanTurn(){
         int x; int y;
         do{
@@ -65,6 +69,10 @@ public class Module implements Observer{
         field[x][y] = DOT_HUMAN;
         drawField();
     }
+
+    /**
+     * aistep
+     */
     public void aiTurn(){
         int x; int y;
         do{
@@ -76,10 +84,17 @@ public class Module implements Observer{
         field[x][y] = DOT_AI;
         drawField();
     }
+
+    /**
+     * check empty cell
+     */
     public boolean checkCellEmpty(int x, int y){
         return simpleLogic.isCellEmpty(x, y, field, DOT_EMPTY);
     }
 
+    /**
+     * check valid cell
+     */
     public boolean checkCellValid(int x, int y){
         return simpleLogic.isCellValid(x, y, fieldSizeX, fieldSizeY);
     }
@@ -89,20 +104,12 @@ public class Module implements Observer{
      * @param dot for check
      * @return true if we have the winner or false if not
      */
-    public boolean checkWin(char dot){
-        if(field[0][0] == dot &&field[0][1] == dot&&field[0][2] == dot) return true;
-        if(field[1][0] == dot &&field[1][1] == dot&&field[1][2] == dot) return true;
-        if(field[2][0] == dot &&field[2][1] == dot&&field[2][2] == dot) return true;
-
-        if(field[0][0] == dot &&field[1][0] == dot&&field[2][0] == dot) return true;
-        if(field[0][1] == dot &&field[1][1] == dot&&field[2][1] == dot) return true;
-        if(field[0][2] == dot &&field[1][2] == dot&&field[2][2] == dot) return true;
-
-        if(field[0][0] == dot &&field[1][1] == dot&&field[2][2] == dot) return true;
-        if(field[0][2] == dot &&field[1][1] == dot&&field[2][0] == dot) return true;
+    public boolean checkWinforThree(char dot){
+        return simpleLogic.checkWinforThree(dot, field);
+    }
+    public boolean check1(int x, int y, char dot, int count){
         return false;
     }
-
     /**
      * friendship is win!
      * @return true if all cells are fill
@@ -112,13 +119,13 @@ public class Module implements Observer{
     }
 
     /**
-     *
+     * check status win or not
      * @param dot dot of player
-     * @param s
-     * @return
+     * @param s just string for congratulation
+     * @return result
      */
     public boolean checkState(char dot, String s){
-        if(checkWin(dot)){
+        if(checkWinforThree(dot)){
             System.out.println(s);
             return true;
         } else if (checkDraw()) {

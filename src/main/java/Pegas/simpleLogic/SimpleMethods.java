@@ -67,4 +67,22 @@ public class SimpleMethods implements SimpleLogic {
         }
         return true;
     }
+    /**
+     * function for check winner
+     * @param dot for check
+     * @return true if we have the winner or false if not
+     */
+    public boolean checkWinforThree(char dot,char[][] field){
+        if(field[0][0] == dot &&field[0][1] == dot&&field[0][2] == dot) return true;
+        if(field[1][0] == dot &&field[1][1] == dot&&field[1][2] == dot) return true;
+        if(field[2][0] == dot &&field[2][1] == dot&&field[2][2] == dot) return true;
+
+        if(field[0][0] == dot &&field[1][0] == dot&&field[2][0] == dot) return true;
+        if(field[0][1] == dot &&field[1][1] == dot&&field[2][1] == dot) return true;
+        if(field[0][2] == dot &&field[1][2] == dot&&field[2][2] == dot) return true;
+
+        if(field[0][0] == dot &&field[1][1] == dot&&field[2][2] == dot) return true;
+        if(field[0][2] == dot &&field[1][1] == dot&&field[2][0] == dot) return true;
+        return false;
+    }
 }
