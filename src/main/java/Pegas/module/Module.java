@@ -107,78 +107,19 @@ public class Module implements Observer{
     public boolean checkWinforThree(char dot){
         return simpleLogic.checkWinforThree(dot, field);
     }
+    /**
+     * function check winner for all fields
+     * @param dot for check
+     * @return true if we have the winner or false if not
+     */
     public boolean checkWin(char dot){
         int count = fieldSizeX-1;
         for (int x = 0; x < fieldSizeX; x++) {
             for (int y = 0; y < fieldSizeY; y++) {
-                if(checkRight(x, y, dot, count))return true;
-                if(checkDown(x, y, dot, count))return true;
-                if(checkDiagUp(x, y, dot, count))return true;
-                if(checkDiagDown(x, y, dot, count))return true;
-            }
-        }
-        return false;
-    }
-    public boolean checkRight(int x, int y, char dot, int count){
-        if(field[x][y] == dot){
-            int z = 0;
-            while (true){
-                if(x+z>fieldSizeX-1 || field[y][x+z] != dot) {
-                    break;
-                }else{
-                    z++;
-                    if(z>=count){
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-    public boolean checkDown(int x, int y, char dot, int count){
-        if(field[x][y] == dot){
-            int z = 0;
-            while (true){
-                if(y+z>fieldSizeY-1 || field[y+z][x] != dot) {
-                    break;
-                }else{
-                    z++;
-                    if(z>=count){
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-    public boolean checkDiagUp(int x, int y, char dot, int count){
-        if(field[x][y] == dot){
-            int z = 0;
-            while (true){
-                if(y+z>fieldSizeY-1 || x-z < 0 || field[y+z][x-z] != dot) {
-                    break;
-                }else{
-                    z++;
-                    if(z>=count){
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-    public boolean checkDiagDown(int x, int y, char dot, int count){
-        if(field[x][y] == dot){
-            int z = 0;
-            while (true){
-                if(y+z> fieldSizeY-1 || x+z > fieldSizeY-1 || field[y+z][x+z] != dot) {
-                    break;
-                }else{
-                    z++;
-                    if(z>=count){
-                        return true;
-                    }
-                }
+                if(simpleLogic.checkRight(x, y, dot, count, field))return true;
+                if(simpleLogic.checkDown(x, y, dot, count, field))return true;
+                if(simpleLogic.checkDiagUp(x, y, dot, count, field))return true;
+                if(simpleLogic.checkDiagDown(x, y, dot, count, field))return true;
             }
         }
         return false;

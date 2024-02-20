@@ -85,4 +85,68 @@ public class SimpleMethods implements SimpleLogic {
         if(field[0][2] == dot &&field[1][1] == dot&&field[2][0] == dot) return true;
         return false;
     }
+    public boolean checkRight(int x, int y, char dot, int count, char[][] field){
+        if(field[x][y] == dot){
+            int z = 0;
+            while (true){
+                if(x+z>count || field[y][x+z] != dot) {
+                    break;
+                }else{
+                    z++;
+                    if(z>=count){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    public boolean checkDown(int x, int y, char dot, int count, char[][] field){
+        if(field[x][y] == dot){
+            int z = 0;
+            while (true){
+                if(y+z>count || field[y+z][x] != dot) {
+                    break;
+                }else{
+                    z++;
+                    if(z>=count){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    public boolean checkDiagUp(int x, int y, char dot, int count, char[][] field){
+        if(field[x][y] == dot){
+            int z = 0;
+            while (true){
+                if(y+z>count || x-z < 0 || field[y+z][x-z] != dot) {
+                    break;
+                }else{
+                    z++;
+                    if(z>=count){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    public boolean checkDiagDown(int x, int y, char dot, int count, char[][] field){
+        if(field[x][y] == dot){
+            int z = 0;
+            while (true){
+                if(y+z> count || x+z > count || field[y+z][x+z] != dot) {
+                    break;
+                }else{
+                    z++;
+                    if(z>=count){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 }
