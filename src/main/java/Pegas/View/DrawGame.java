@@ -17,6 +17,7 @@ public class DrawGame implements View {
         int x = scanner.nextInt();
         int y = scanner.nextInt();
         observer.init(x,y);
+        scanner.close();
     }
 
 }

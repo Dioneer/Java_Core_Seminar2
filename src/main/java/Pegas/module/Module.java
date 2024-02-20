@@ -107,9 +107,83 @@ public class Module implements Observer{
     public boolean checkWinforThree(char dot){
         return simpleLogic.checkWinforThree(dot, field);
     }
-    public boolean check1(int x, int y, char dot, int count){
+    public boolean checkWin(char dot){
+        int count = fieldSizeX-1;
+        for (int x = 0; x < fieldSizeX; x++) {
+            for (int y = 0; y < fieldSizeY; y++) {
+                if(checkRight(x, y, dot, count))return true;
+                if(checkDown(x, y, dot, count))return true;
+                if(checkDiagUp(x, y, dot, count))return true;
+                if(checkDiagDown(x, y, dot, count))return true;
+            }
+        }
         return false;
     }
+    public boolean checkRight(int x, int y, char dot, int count){
+        if(field[x][y] == dot){
+            int z = 0;
+            while (true){
+                if(x+z>fieldSizeX-1 || field[y][x+z] != dot) {
+                    break;
+                }else{
+                    z++;
+                    if(z>=count){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    public boolean checkDown(int x, int y, char dot, int count){
+        if(field[x][y] == dot){
+            int z = 0;
+            while (true){
+                if(y+z>fieldSizeY-1 || field[y+z][x] != dot) {
+                    break;
+                }else{
+                    z++;
+                    if(z>=count){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    public boolean checkDiagUp(int x, int y, char dot, int count){
+        if(field[x][y] == dot){
+            int z = 0;
+            while (true){
+                if(y+z>fieldSizeY-1 || x-z < 0 || field[y+z][x-z] != dot) {
+                    break;
+                }else{
+                    z++;
+                    if(z>=count){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    public boolean checkDiagDown(int x, int y, char dot, int count){
+        if(field[x][y] == dot){
+            int z = 0;
+            while (true){
+                if(y+z> fieldSizeY-1 || x+z > fieldSizeY-1 || field[y+z][x+z] != dot) {
+                    break;
+                }else{
+                    z++;
+                    if(z>=count){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     /**
      * friendship is win!
      * @return true if all cells are fill
@@ -125,11 +199,20 @@ public class Module implements Observer{
      * @return result
      */
     public boolean checkState(char dot, String s){
-        if(checkWinforThree(dot)){
-            System.out.println(s);
-            return true;
-        } else if (checkDraw()) {
-            System.out.println("friendship is win!");
+        if(fieldSizeX==3) {
+            if (checkWinforThree(dot)) {
+                System.out.println(s);
+                return true;
+            } else if (checkDraw()) {
+                System.out.println("friendship is win!");
+            }
+        }else{
+            if (checkWin(dot)) {
+                System.out.println(s);
+                return true;
+            } else if (checkDraw()) {
+                System.out.println("friendship is win!");
+            }
         }
         return false;
     }
