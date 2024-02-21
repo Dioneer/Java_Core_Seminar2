@@ -27,11 +27,7 @@ public class SimpleMethods implements SimpleLogic {
      */
     @Override
     public boolean isCellEmpty(int x, int y, char[][] field, char dot) {
-        boolean rez = field[x][y] == dot;
-        if(!rez){
-            System.out.println("This cell is not empty");
-        }
-        return  rez;
+        return field[x][y] == dot;
     }
 
     /**
@@ -85,6 +81,11 @@ public class SimpleMethods implements SimpleLogic {
         if(field[0][2] == dot &&field[1][1] == dot&&field[2][0] == dot) return true;
         return false;
     }
+    /**
+     * function check winner for all fields
+     * @param dot for check
+     * @return true if we have the winner or false if not
+     */
     public boolean checkRight(int x, int y, char dot, int count, char[][] field){
         if(field[x][y] == dot){
             int z = 0;

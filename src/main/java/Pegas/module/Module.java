@@ -63,9 +63,9 @@ public class Module implements Observer{
         int x; int y;
         do{
             System.out.println("Enter X and Y step coordinates\n(from 1 to 3) with a space: ");
-            x = scanner.nextInt() - 1;
-            y = scanner.nextInt() - 1;
-        }while (!checkCellValid(x,y) || !checkCellEmpty(x,y));
+            x=scanner.nextInt()-1;
+            y=scanner.nextInt()-1;
+        }while (!checkCellValid(x,y) || !checkCellEmpty(x, y));
         field[x][y] = DOT_HUMAN;
         drawField();
     }
@@ -74,29 +74,141 @@ public class Module implements Observer{
      * aistep
      */
     public void aiTurn(){
-        int x; int y;
+        int x ; int y;
         do{
             System.out.println("Now ai turn: ");
-            x = random.nextInt(fieldSizeX);
-            y = random.nextInt(fieldSizeY);
-        }
-        while (!checkCellEmpty(x,y));
+            List<Integer> coord1 = new ArrayList<>();
+            for (int i = 0; i < fieldSizeX; i++) {
+                for (int j = 0; j < fieldSizeY; j++) {
+                    if(!checkStep1(i, j).isEmpty()) {
+                        coord1 = checkStep1(i, j);
+                        break;
+                    }
+                    if(!checkStep2(i, j).isEmpty()) {
+                        coord1 = checkStep2(i, j);
+                        break;
+                    }
+                    if(!checkStep3(i, j).isEmpty()) {
+                        coord1= checkStep3(i, j);
+                        break;
+                    }
+                    if(!checkStep4(i, j).isEmpty()) {
+                        coord1= checkStep4(i, j);
+                        break;
+                    }
+                }
+            }
+            if(!coord1.isEmpty()){
+                System.out.println(coord1);
+                x= coord1.get(0);
+                y= coord1.get(1);
+                coord1.clear();
+                if(!checkCellEmpty(x, y)){
+                    if(x<fieldSizeX && y < fieldSizeY){
+                        ++x;
+                        ++y;
+                    }
+                }
+            }else{
+                x = random.nextInt(fieldSizeX);
+                y = random.nextInt(fieldSizeY);
+            }
+            System.out.println(x+" "+y);
+        }while (!checkCellEmpty(x, y));
         field[x][y] = DOT_AI;
         drawField();
+    }
+
+    public List<Integer> checkStep1(int i, int j){
+        int count = 2;
+        List<Integer> arr= new ArrayList<>();
+                if(field[i][j] == DOT_HUMAN){
+                    int z = 0;
+                    while (true){
+                        if(j+z> fieldSizeX-1 || i+z > fieldSizeY-1 || field[j+z][i+z] != DOT_HUMAN) {
+                            break;
+                        }else{
+                            z++;
+                            if(z>=count){
+                                arr.add(j+z);
+                                arr.add(i+z);
+                            }
+                        }
+                    }
+                }
+        return arr;
+    }
+    public List<Integer> checkStep2(int i, int j){
+        int count = 2;
+        List<Integer> arr= new ArrayList<>();
+                if(field[i][j] == DOT_HUMAN){
+                    int z = 0;
+                    while (true){
+                        if(i+z> fieldSizeX-1 || field[j][i+z] != DOT_HUMAN) {
+                            break;
+                        }else{
+                            z++;
+                            if(z>=count){
+                                arr.add(j);
+                                arr.add(i+z);
+                            }
+                        }
+                    }
+                }
+        return arr;
+    }
+    public List<Integer> checkStep3(int i, int j){
+        int count = 2;
+        List<Integer> arr= new ArrayList<>();
+        if(field[i][j] == DOT_HUMAN){
+            int z = 0;
+            while (true){
+                if(j+z> fieldSizeX-1 || field[j+z][i] != DOT_HUMAN) {
+                    break;
+                }else{
+                    z++;
+                    if(z>=count){
+                        arr.add(j+z);
+                        arr.add(i);
+                    }
+                }
+            }
+        }
+        return arr;
+    }
+    public List<Integer> checkStep4(int i, int j){
+        int count = 2;
+        List<Integer> arr= new ArrayList<>();
+        if(field[i][j] == DOT_HUMAN){
+            int z = 0;
+            while (true){
+                if(j+z> fieldSizeX-1 || i-z < 0 || field[j+z][i-z] != DOT_HUMAN) {
+                    break;
+                }else{
+                    z++;
+                    if(z>=count){
+                        arr.add(j+z);
+                        arr.add(i-z);
+                        System.out.println(arr);
+                    }
+                }
+            }
+        }
+        return arr;
     }
 
     /**
      * check empty cell
      */
     public boolean checkCellEmpty(int x, int y){
-        return simpleLogic.isCellEmpty(x, y, field, DOT_EMPTY);
+        return simpleLogic.isCellEmpty(x,y, field, DOT_EMPTY);
     }
 
     /**
      * check valid cell
      */
-    public boolean checkCellValid(int x, int y){
-        return simpleLogic.isCellValid(x, y, fieldSizeX, fieldSizeY);
+    public boolean checkCellValid(int x, int y) {
+        return simpleLogic.isCellValid(x,y, fieldSizeX, fieldSizeY);
     }
 
     /**
