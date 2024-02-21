@@ -119,6 +119,12 @@ public class Module implements Observer{
         drawField();
     }
 
+    /**
+     * block noodles code with blood from eyes
+     * @param i - vertical
+     * @param j - horiz
+     * @return
+     */
     public List<Integer> checkStep1(int i, int j){
         int count = 2;
         List<Integer> arr= new ArrayList<>();
